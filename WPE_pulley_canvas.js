@@ -1,11 +1,23 @@
 // pulley_canvas.js - Canvas-based Pulley System Simulation
+const defaultValues={
+    mass1Value: 1,
+    mass2Value: 2
+};
+function startSimulation(parameters){
 
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let mass1Value = parameters?.mass1Value ?? defaultValues.mass1Value;
+    let mass2Value = parameters?.mass2Value ?? defaultValues.mass2Value;
+   
 // Global variables
 let canvas, ctx;
 let gravity = 9.81; // m/s^2
 let pulleyRadius = 50; // pixels
-let mass1Value = 1; // kg
-let mass2Value = 2; // kg
+
 let position = 0; // Initial position of mass 1 relative to the pulley center (positive is down)
 let velocity = 0; // Initial velocity
 let lastTime = 0;
@@ -531,4 +543,5 @@ initPulleyCanvas();
 // Override wireframes setting if render exists
 if (typeof render !== 'undefined' && render && render.options) {
     render.options.wireframes = false;
+}
 }

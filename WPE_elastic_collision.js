@@ -1,11 +1,19 @@
 // elastic_collision.js - Simple Elastic Collision with Standard Frame Size
-
+const defaultValues = { ball1Mass: 2, ball2Mass: 1, ball1VelX: 3, ball2VelX: -2, restitution: 1.0 };
 // Global variables
-let ball1Mass = 2;         // Mass of ball 1 (kg)
-let ball2Mass = 1;         // Mass of ball 2 (kg)  
-let ball1VelX = 3;         // Initial X velocity of ball 1 (m/s)
-let ball2VelX = -2;        // Initial X velocity of ball 2 (m/s)
-let restitution = 1.0;     // Coefficient of restitution (0-1)
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let ball1Mass = parameters?.ball1Mass ?? defaultValues.ball1Mass;
+    let ball2Mass = parameters?.ball2Mass ?? defaultValues.ball2Mass;
+    let ball1VelX = parameters?.ball1VelX ?? defaultValues.ball1VelX;
+    let ball2VelX = parameters?.ball2VelX ?? defaultValues.ball2VelX;
+    let restitution = parameters?.restitution ?? defaultValues.restitution;
 let ball1, ball2;
 
 function elasticCollision(m1, m2, v1x, v2x, e) {
@@ -312,3 +320,4 @@ elasticCollision(2, 1, 3, -2, 1.0); // Controlled initial velocities
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}

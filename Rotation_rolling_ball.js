@@ -1,11 +1,22 @@
 // rolling_ball.js - Rolling Ball Simulation with Cycloid Tracing
-
+const defaultValues={
+    ballRadius: 30,
+    ballSpeed: 5
+    MAX_TRAIL_POINTS: 300
+};
 // Global variables
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let ballRadius = parameters?.ballRadius ?? defaultValues.ballRadius;
+    let ballSpeed = parameters?.ballSpeed ?? defaultValues.ballSpeed;
+    let MAX_TRAIL_POINTS = parameters?.MAX_TRAIL_POINTS ?? defaultValues.MAX_TRAIL_POINTS;
 let ball;
-let ballRadius = 30;
-let ballSpeed = 5;
 let trailPoints = [];
-const MAX_TRAIL_POINTS = 300;
 let tracerPointAngle = 0;
 
 // Ground top edge
@@ -348,3 +359,4 @@ window.resetparams = resetparams;
 
 // Override wireframes setting
 render.options.wireframes = false;
+}

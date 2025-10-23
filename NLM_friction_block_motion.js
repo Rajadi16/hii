@@ -1,11 +1,22 @@
 // block-motion.js - YOUR EXACT CODE with Custom Control Panel
 
 //when reset, just the position is changing, im not putting stuff back to initial.
-
+const defaultValues={
+    appliedForce : 50,
+    friction : 0.3,
+    blockMass : 1.0
+}
 // Global variables
-let appliedForce = 50;
-let friction = 0.3;
-let blockMass = 1.0;
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let appliedForce = parameters?.appliedForce ?? defaultValues.appliedForce;
+    let friction = parameters?.friction ?? defaultValues.friction;
+    let blockMass = parameters?.blockMass ?? defaultValues.blockMass;
 let body;
 
 // ground(common to questions with a ground-this exact code.)
@@ -282,3 +293,4 @@ blockMotion(50, 0.3, 1.0);
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}

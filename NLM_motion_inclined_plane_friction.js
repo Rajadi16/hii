@@ -1,19 +1,43 @@
 // motion_inclined_plane.js - EXACT ORIGINAL CODE + Custom Control Panel
 
 // Uses worldcreation.js for Matter.js setup
+const defaultValues={
+    friction: 0.3,
+    appliedForce: 0,
+    forceAngle: 0,
+   
+    planeAngle: 30,
+    blockSize: 25
+}
 
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+let electricField = parameters?.electricField ?? defaultValues.electricField;
+    let temperature = parameters?.temperature ?? defaultValues.temperature;
+    let material = parameters?.material ?? defaultValues.material;
+    let friction = parameters?.friction ?? defaultValues.friction;
+    let appliedForce = parameters?.appliedForce ?? defaultValues.appliedForce;
+    let forceAngle = parameters?.forceAngle ?? defaultValues.forceAngle;
+    let planeAngle = parameters?.planeAngle ?? defaultValues.planeAngle;
+    let blockSize = parameters?.blockSize ?? defaultValues.blockSize;
+    
 // Enable gravity
 engine.world.gravity.y = 1;
 
 // Global variables
 let block, inclinedPlane;
-let friction = 0.3;
-let appliedForce = 0;
-let forceAngle = 0; // angle of applied force in degrees
+
+
+
 let gravity = 1;
-let planeAngle = 30; // angle of inclined plane in degrees
+
 let blockMass = 10;
-let blockSize = 25; // Added block size as variable
+
 
 // Convert degrees to radians
 function toRadians(degrees) {
@@ -349,3 +373,4 @@ motionInclinedPlane(0.3, 0, 0, 1, 30, 25); // friction=0.3, force=0, angle=0°, 
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}

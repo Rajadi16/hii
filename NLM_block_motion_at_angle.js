@@ -3,10 +3,23 @@
 //when reset, just the position is changing, im not putting stuff back to initial.
 
 // Global variables
-let appliedForce = 50;
-let forceAngle = 0; // angle of force in degrees
-let friction = 0.3;
-let blockMass = 1.0;
+const defaultValues={
+    appliedForce: 50,
+    forceAngle: 0,
+    friction: 0.3,
+    blockMass: 1.0,
+    
+}
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+    let appliedForce = parameters?.appliedForce ?? defaultValues.appliedForce;
+    let forceAngle = parameters?.forceAngle ?? defaultValues.forceAngle;
+    let friction = parameters?.friction ?? defaultValues.friction;
+    let blockMass = parameters?.blockMass ?? defaultValues.blockMass;
+
+
 let body;
 let gravity = 1; // gravity constant
 let forceApplied = false; // Force application state - START WITH FORCE NOT APPLIED
@@ -372,3 +385,10 @@ blockMotion(50, 0, 0.3, 1.0); // Default: 50N force, 0° angle, 0.3 friction, 1.
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}
+let val={appliedForce: 70,
+    forceAngle: 0,
+    friction: 0.3,
+    blockMass: 1.0,};
+    val=JSON.stringify(val);
+    startSimulation(val);
