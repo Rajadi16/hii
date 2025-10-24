@@ -1,9 +1,21 @@
 // uniform_circular_motion.js - Custom Control Panel
-
+const defaultValues={
+    circleRadius: 100,
+    angularVelocity: 0.05,
+    objectSize: 15
+};
 // Global variables
-let circleRadius = 100;
-let angularVelocity = 0.05; // Changed from rotationSpeed to angularVelocity (ω)
-let objectSize = 15;
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let circleRadius = parameters?.circleRadius ?? defaultValues.circleRadius;
+    let angularVelocity = parameters?.angularVelocity ?? defaultValues.angularVelocity;
+    let objectSize = parameters?.objectSize ?? defaultValues.objectSize;
+   
 let currentAngle = 0;
 let movingBody;
 // Array to store trail particles
@@ -261,3 +273,11 @@ Events.on(render, 'afterRender', function() {
 addCustomControlStyles();
 createCustomControlPanel();
 uniformCircularMotion(100, 0.05, 15);
+}
+val={
+    circleRadius: 100,
+    angularVelocity: 0.05,
+    objectSize: 15
+};
+val=JSON.stringify(val);
+startSimulation(val);

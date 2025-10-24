@@ -1,10 +1,25 @@
 // gravitational_circular_orbit.js - Circular Orbit Around Central Mass
+const defaultValues={
+    centralMass: 100,
+    orbitingMass: 5,
+    orbitRadius: 250,
+    orbitalSpeed: 4.5
+    
+};
+function startSimulation(parameters){
 
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let centralMass = parameters?.centralMass ?? defaultValues.centralMass;
+    let orbitingMass = parameters?.orbitingMass ?? defaultValues.orbitingMass;
+    let orbitRadius = parameters?.orbitRadius ?? defaultValues.orbitRadius;
+    let orbitalSpeed = parameters?.orbitalSpeed ?? defaultValues.orbitalSpeed;
 // Global variables
-let centralMass = 100;
-let orbitingMass = 5;
-let orbitRadius = 250;
-let orbitalSpeed = 3.5;
+
 let G = 1.0;
 
 let centralBody, orbitingBody;
@@ -112,6 +127,13 @@ Events.on(render, 'afterRender', function() {
         const midY = (centralBody.position.y + orbitingBody.position.y) / 2;
         context.fillText(`r = ${distance.toFixed(1)}`, midX + 10, midY);
     }
+    
+    // Display the gravitational constant and formula on the side
+    context.fillStyle = '#FFD700'; // Gold color for visibility
+    context.font = 'bold 14px Arial';
+    context.fillText('G = 6.67430 × 10⁻¹¹ m³/kg⋅s²', 620, 30);
+    context.font = '12px Arial';
+    context.fillText('F = G × m₁ × m₂ / r²', 620, 50);
 });
 
 function resetScene() {
@@ -237,12 +259,6 @@ function createCustomControlPanel() {
             <input type="range" id="speed-slider" min="1" max="6" step="0.1" value="${orbitalSpeed}">
             <div class="info-text">Speed multiplier for orbit</div>
         </div>
-
-        <div class="control-group">
-            <label>Gravity Strength: <span class="value-display" id="g-value">${G}</span></label>
-            <input type="range" id="g-slider" min="0.5" max="3" step="0.1" value="${G}">
-            <div class="info-text">Universal gravitational constant</div>
-        </div>
     `;
 
     document.body.appendChild(panel);
@@ -277,11 +293,6 @@ function attachControlListeners() {
         resetparams();
         playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     });
-
-    document.getElementById('g-slider').addEventListener('input', function() {
-        G = parseFloat(this.value);
-        document.getElementById('g-value').textContent = G.toFixed(1);
-    });
 }
 
 function ResetGUI() {
@@ -289,15 +300,21 @@ function ResetGUI() {
     document.getElementById('omass-slider').value = orbitingMass;
     document.getElementById('radius-slider').value = orbitRadius;
     document.getElementById('speed-slider').value = orbitalSpeed;
-    document.getElementById('g-slider').value = G;
 
     document.getElementById('cmass-value').textContent = centralMass;
     document.getElementById('omass-value').textContent = orbitingMass;
     document.getElementById('radius-value').textContent = orbitRadius;
     document.getElementById('speed-value').textContent = orbitalSpeed.toFixed(1);
-    document.getElementById('g-value').textContent = G.toFixed(1);
 }
 
 addCustomControlStyles();
 createCustomControlPanel();
 createOrbitalSystem(centralMass, orbitingMass, orbitRadius, orbitalSpeed);
+}
+val={centralMass: 100,
+    orbitingMass: 5,
+    orbitRadius: 250,
+    orbitalSpeed: 4.5  
+};
+val=JSON.stringify(val);
+startSimulation(val);

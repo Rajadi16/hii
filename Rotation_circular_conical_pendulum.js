@@ -1,15 +1,29 @@
 // conical_pendulum.js - Conical Pendulum with Oval Motion Path
-
+const defaultValues={
+ellipseA: 100, // Semi-major axis
+ellipseB: 60, 
+ballRadius: 15,
+angularVelocity :0.03
+};
 // Global variables
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let ellipseA = parameters?.ellipseA ?? defaultValues.ellipseA;
+    let ellipseB = parameters?.ellipseB ?? defaultValues.ellipseB;
+    let ballRadius = parameters?.ballRadius ?? defaultValues.ballRadius;
+    let angularVelocity = parameters?.angularVelocity ?? defaultValues.angularVelocity;
 let pendulumBall, pendulumConstraint;
 let pivotX = 400;
 let pivotY = 100; // Moved pivot point higher above the ellipse
 let pendulumLength = 150;
-let ballRadius = 15;
-let angularVelocity = 0.03; // Angular velocity for circular motion
+ // Angular velocity for circular motion
 let currentAngle = 0;
-let ellipseA = 100; // Semi-major axis
-let ellipseB = 60;  // Semi-minor axis
+ // Semi-minor axis
 let ellipseCenterX = 400; // Center of the ellipse path
 let ellipseCenterY = 250; // Center of the ellipse path (lower than pivot)
 let trailParticles = [];
@@ -306,3 +320,4 @@ Events.on(render, 'afterRender', function() {
 addCustomControlStyles();
 createCustomControlPanel();
 createConicalPendulum();
+}

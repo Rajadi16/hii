@@ -1,14 +1,27 @@
 // shm-ground.js - SHM simulation with block on surface and mass on ground - WITH CONTROL PANEL
 
+const defaultValues = {
+    amplitude: 150, // Fixed distance for oscillation
+    frequency: 0.25, // Oscillation frequency
+    period: 8// Period in seconds 
+};
+function startSimulation(parameters){
 
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let amplitude = parameters?.amplitude ?? defaultValues.amplitude;
+    let frequency = parameters?.frequency ?? defaultValues.frequency;
+    let period = parameters?.period ?? defaultValues.period;
 let block, mass, spring, ground;
 let isDragging = false;
 let dragPoint = null;
 let initialPosition;
-let amplitude = 150; // Fixed distance for oscillation
+
 let animationId;
-let frequency = 0.25; // Oscillation frequency
-let period = 8; // Period in seconds
 
 
 // Ground parameters (matching projectile simulation)
@@ -326,3 +339,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 setupSHMGround();
+}

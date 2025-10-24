@@ -9,7 +9,7 @@ const defaultValues={
     friction: 0.3,
     blockMass: 1.0,
     
-}
+};
 function startSimulation(parameters){
 
     //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
@@ -386,9 +386,9 @@ blockMotion(50, 0, 0.3, 1.0); // Default: 50N force, 0° angle, 0.3 friction, 1.
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
 }
-let val={appliedForce: 70,
-    forceAngle: 0,
-    friction: 0.3,
-    blockMass: 1.0,};
-    val=JSON.stringify(val);
-    startSimulation(val);
+val={ appliedForce: 60,
+    forceAngle: 2,
+    friction: 0.5,
+    blockMass: 2.0, };
+val=JSON.stringify(val);
+startSimulation(val);

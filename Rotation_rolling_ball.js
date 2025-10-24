@@ -1,7 +1,7 @@
 // rolling_ball.js - Rolling Ball Simulation with Cycloid Tracing
 const defaultValues={
     ballRadius: 30,
-    ballSpeed: 5
+    ballSpeed: 5,
     MAX_TRAIL_POINTS: 300
 };
 // Global variables

@@ -32,6 +32,7 @@ function createFirstLawSimulation() {
         mass: 5,
         frictionAir: 0,
         friction: 0,
+        inertia: Infinity, // Prevent rotation as per user preference
         render: { fillStyle: '#FF6347' }
     });
 
@@ -50,12 +51,20 @@ Events.on(engine, 'beforeUpdate', function() {
         velocityData.push({ t: time, v: box.velocity.x });
         if (velocityData.length > maxDataPoints) velocityData.shift();
 
-        if (box.position.x > 800 || box.position.x < 0) {
+        // Pause simulation after 4 seconds
+        if (time >= 4) {
             simulationComplete = true;
             isPlaying = false;
             if (playPauseBtn) {
                 playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             }
+        }
+
+        // Keep box within bounds by wrapping around
+        if (box.position.x > 750) {
+            Body.setPosition(box, { x: 50, y: box.position.y });
+        } else if (box.position.x < 50) {
+            Body.setPosition(box, { x: 750, y: box.position.y });
         }
     }
 });
@@ -63,9 +72,11 @@ Events.on(engine, 'beforeUpdate', function() {
 Events.on(render, 'afterRender', function() {
     const context = render.context;
 
-    drawVelocityGraph(context);
-    drawLiveDataPanel(context);
-    drawForceArrow(context);
+    // Only draw when simulation is initialized
+    if (box) {
+        drawLiveDataPanel(context);
+        drawForceArrow(context);
+    }
 });
 
 function drawForceArrow(context) {
@@ -102,73 +113,19 @@ function drawForceArrow(context) {
     }
 }
 
-function drawVelocityGraph(context) {
-    const graphX = 480;
-    const graphY = 50;
-    const graphWidth = 280;
-    const graphHeight = 200;
-
-    context.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    context.fillRect(graphX, graphY, graphWidth, graphHeight);
-
-    context.strokeStyle = '#FFFFFF';
-    context.lineWidth = 2;
-    context.strokeRect(graphX, graphY, graphWidth, graphHeight);
-
-    context.fillStyle = '#10A37F';
-    context.font = 'bold 14px Arial';
-    context.textAlign = 'center';
-    context.fillText('Velocity vs Time', graphX + graphWidth/2, graphY - 10);
-
-    context.strokeStyle = '#888';
-    context.lineWidth = 1;
-    context.beginPath();
-    context.moveTo(graphX + 30, graphY + 20);
-    context.lineTo(graphX + 30, graphY + graphHeight - 30);
-    context.lineTo(graphX + graphWidth - 20, graphY + graphHeight - 30);
-    context.stroke();
-
-    context.fillStyle = '#FFFFFF';
-    context.font = '11px Arial';
-    context.fillText('Time (s)', graphX + graphWidth/2, graphY + graphHeight - 5);
-
-    context.save();
-    context.translate(graphX + 10, graphY + graphHeight/2);
-    context.rotate(-Math.PI/2);
-    context.fillText('Velocity (m/s)', 0, 0);
-    context.restore();
-
-    if (velocityData.length > 1) {
-        context.beginPath();
-        const maxTime = Math.max(10, time);
-        const timeScale = (graphWidth - 50) / maxTime;
-        const velScale = (graphHeight - 50) / 20;
-
-        for (let i = 0; i < velocityData.length; i++) {
-            const x = graphX + 30 + (velocityData[i].t * timeScale);
-            const y = graphY + graphHeight - 30 - (velocityData[i].v * velScale);
-
-            if (i === 0) context.moveTo(x, y);
-            else context.lineTo(x, y);
-        }
-
-        context.strokeStyle = '#00FFFF';
-        context.lineWidth = 2;
-        context.stroke();
-    }
-}
+// Velocity graph removed as per user request
 
 function drawLiveDataPanel(context) {
-    const panelX = 120;
+    const panelX = 100;
     const panelY = 50;
     const lineHeight = 22;
 
     context.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    context.fillRect(panelX - 80, panelY - 20, 210, 240);
+    context.fillRect(panelX - 50, panelY - 20, 210, 240);
 
     context.strokeStyle = '#4D4D4F';
     context.lineWidth = 1;
-    context.strokeRect(panelX - 80, panelY - 20, 210, 240);
+    context.strokeRect(panelX - 50, panelY - 20, 210, 240);
 
     context.fillStyle = '#FFFFFF';
     context.font = 'bold 16px Arial';
@@ -210,7 +167,7 @@ function drawLiveDataPanel(context) {
     context.fillText('• Unless acted upon by force', panelX, yOffset);
 }
 
-function resetScene() {
+window.resetScene = function() {
     Runner.stop(runner);
     isPlaying = false;
     simulationComplete = false;
@@ -218,9 +175,10 @@ function resetScene() {
         playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     }
     createFirstLawSimulation();
+    ResetGUI();
 }
 
-function resetparams() {
+window.resetparams = function() {
     Runner.stop(runner);
     isPlaying = false;
     simulationComplete = false;
@@ -228,6 +186,7 @@ function resetparams() {
         playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     }
     createFirstLawSimulation();
+    ResetGUI();
 }
 
 function addCustomControlStyles() {
@@ -301,3 +260,8 @@ addCustomControlStyles();
 createCustomControlPanel();
 createFirstLawSimulation();
 }
+ val={appliedForce: 4,
+    initialVelocity: 20
+ };
+ val=JSON.stringify(val);
+ startSimulation(val);

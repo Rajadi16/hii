@@ -5,7 +5,7 @@ const defaultValues={
     appliedForce : 50,
     friction : 0.3,
     blockMass : 1.0
-}
+};
 // Global variables
 function startSimulation(parameters){
 
@@ -294,3 +294,9 @@ blockMotion(50, 0.3, 1.0);
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
 }
+val={ appliedForce : 70,
+    friction : 0.5,
+    blockMass : 3.0
+};
+val=JSON.stringify(val);
+startSimulation(val);
