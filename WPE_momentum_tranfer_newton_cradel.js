@@ -1,10 +1,22 @@
 // newtons_cradle.js - Newton's Cradle with Custom Control Panel
-
+const defaultValues={
+    ballCount: 5,
+    ballSize: 30,
+    stringLength: 200,
+    ballSpacing: 1.9
+};
 // Global variables
-let ballCount = 5;      // Number of balls (3-8)
-let ballSize = 30;      // Size of each ball (15-50)
-let stringLength = 200; // Length of strings (150-300)
-let ballSpacing = 1.9;  // Spacing between balls (1.5-2.5)
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let ballCount = parameters?.ballCount ?? defaultValues.ballCount;
+    let ballSize = parameters?.ballSize ?? defaultValues.ballSize;
+    let stringLength = parameters?.stringLength ?? defaultValues.stringLength;
+    let ballSpacing = parameters?.ballSpacing ?? defaultValues.ballSpacing;
 let cradle, balls = [], strings = [];
 
 function newtonsCradle(count, size, length, spacing) {
@@ -307,3 +319,10 @@ newtonsCradle(5, 30, 200, 1.9); // Exactly like your reference
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}
+val={ ballCount: 6,
+    ballSize: 49,
+    stringLength: 500,
+    ballSpacing: 1.5 };
+val=JSON.stringify(val);
+startSimulation(val);

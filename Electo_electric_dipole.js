@@ -1,9 +1,22 @@
 // electric_dipole.js - Electric Field and Potential due to Dipole
+const defaultValues={
+    chargeMagnitude: 5.0,
+    dipoleDistance: 200
+};
+
 
 // Global variables
-let chargeMagnitude = 5.0;
-let dipoleDistance = 200;
-let k = 9.0;
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let chargeMagnitude = parameters?.chargeMagnitude ?? defaultValues.chargeMagnitude;
+    let dipoleDistance = parameters?.dipoleDistance ?? defaultValues.dipoleDistance;
+const k = 8.988e9; // Original Coulomb's constant (N⋅m²/C²)
 
 let positiveCharge, negativeCharge;
 let mouseX = 400;
@@ -16,10 +29,10 @@ let animationOffset = 0; // For flowing animation
 engine.world.gravity.y = 0;
 engine.world.gravity.x = 0;
 
-function createDipoleSystem(q, distance, kVal) {
+function createDipoleSystem(q, distance) {
     chargeMagnitude = q;
     dipoleDistance = distance;
-    k = kVal;
+    // k is now a constant, so we don't need to pass it as a parameter
 
     const centerX = 400;
     const centerY = 300;
@@ -331,12 +344,18 @@ Events.on(render, 'afterRender', function() {
     yOffset += lineHeight;
     context.fillText('Press Play to see flowing animation', panelX, yOffset);
 
-    // Formulas at bottom
+    // Formulas at bottom with original Coulomb's constant
     context.fillStyle = '#FFFFFF';
     context.font = 'italic 11px Arial';
     context.fillText('Electric Field: E = E₊ + E₋ (vector sum)', 10, 570);
     context.fillText('Electric Potential: V = V₊ + V₋ (scalar sum)', 10, 585);
     context.fillText('Dipole: p = q × d  |  On axis: E ∝ 1/r³', 10, 600);
+    
+    // Display original Coulomb's constant on the bottom left
+    context.fillStyle = '#FFD700'; // Gold color for visibility
+    context.font = 'bold 12px Arial';
+    context.textAlign = 'left';
+    context.fillText('k = 8.988 × 10⁹ N⋅m²/C²', 10, 555);
 });
 
 function drawArrowhead(context, x, y, angle, size, color = '#00FFFF') {
@@ -494,12 +513,6 @@ function createCustomControlPanel() {
             <input type="range" id="distance-slider" min="100" max="400" step="20" value="${dipoleDistance}">
             <div class="info-text">Distance between charges</div>
         </div>
-
-        <div class="control-group">
-            <label>Coulomb Constant (k): <span class="value-display" id="k-value">${k.toFixed(1)}</span></label>
-            <input type="range" id="k-slider" min="1" max="20" step="0.5" value="${k}">
-            <div class="info-text">Field strength multiplier</div>
-        </div>
     `;
 
     document.body.appendChild(panel);
@@ -524,28 +537,18 @@ function attachControlListeners() {
             playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
         }
     });
-
-    document.getElementById('k-slider').addEventListener('input', function() {
-        k = parseFloat(this.value);
-        document.getElementById('k-value').textContent = k.toFixed(1);
-        resetparams();
-        if (playPauseBtn) {
-            playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        }
-    });
 }
 
 function ResetGUI() {
     document.getElementById('q-slider').value = chargeMagnitude;
     document.getElementById('distance-slider').value = dipoleDistance;
-    document.getElementById('k-slider').value = k;
 
     document.getElementById('q-value').textContent = chargeMagnitude.toFixed(1);
     document.getElementById('distance-value').textContent = dipoleDistance;
-    document.getElementById('k-value').textContent = k.toFixed(1);
 }
 
 // Initialize
 addCustomControlStyles();
 createCustomControlPanel();
-createDipoleSystem(chargeMagnitude, dipoleDistance, k);
+createDipoleSystem(chargeMagnitude, dipoleDistance);
+}

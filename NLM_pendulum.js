@@ -1,14 +1,27 @@
 // pendulum.js - Your original code with NO air resistance, longer swinging
+const defaultValues = {
+    pendulumLength: 200,
+    initialAngle: Math.PI / 6
+};
+function startSimulation(parameters){
 
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+let pendulumLength = parameters?.pendulumLength ?? defaultValues.pendulumLength;
+    let initialAngle = parameters?.initialAngle ?? defaultValues.initialAngle;
+    
 // Global variables
 let pendulumBall, pendulumConstraint;
 let pivotX = 400;
 let pivotY = 230;
-let pendulumLength = 200;
+
 let ballRadius = 25;
 
 // Initial angle in radians (30 degrees)
-let initialAngle = Math.PI / 6;
+
 
 function createPendulum() {
     // Calculate initial position of the ball based on the angle
@@ -220,3 +233,9 @@ createPendulum();
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}
+val={ pendulumLength: 200,
+    initialAngle: Math.PI / 8
+ };
+ val=JSON.stringify(val);
+ startSimulation(val);

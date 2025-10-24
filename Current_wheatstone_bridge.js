@@ -1,7 +1,25 @@
 // wheatstone_bridge.js - Wheatstone Bridge Simulator
+const defaultValues={
+    voltage: 6,
+    R1:100,
+    R2:100,
+    R3:150,
+    R4:150
+};
 // Global variables
-let R1 = 100, R2 = 100, R3 = 150, R4 = 150; // Resistances in Ohms
-let voltage = 6; // Battery voltage
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let R1 = parameters?.R1 ?? defaultValues.R1;
+    let R2 = parameters?.R2 ?? defaultValues.R2;
+    let R3 = parameters?.R3 ?? defaultValues.R3;
+    let R4 = parameters?.R4 ?? defaultValues.R4;
+    let voltage = parameters?.voltage ?? defaultValues.voltage;
 let galvanometerCurrent = 0;
 let isBalanced = false;
 let VB = 0, VD = 0; // Potentials at nodes B and D
@@ -428,3 +446,13 @@ function autoBalance() {
 addCustomControlStyles();
 createCustomControlPanel();
 createWheatstoneBridge();
+}
+val={
+    voltage: 6,
+    R1:100,
+    R2:100,
+    R3:150,
+    R4:150
+};
+val=JSON.stringify(val);
+startSimulation(val);

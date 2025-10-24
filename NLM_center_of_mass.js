@@ -1,11 +1,25 @@
 // center_of_mass.js - Center of Mass Simulation with Person on Frictionless Plank
+const defaultValues={
+        carVelocity: 2,
+    carMass: 10,
+    plankMass: 50,
+    plankLength: 400
 
+};
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+let carVelocity = parameters?.carVelocity ?? defaultValues.carVelocity;
+    let carMass = parameters?.carMass ?? defaultValues.carMass;
+    let plankMass = parameters?.plankMass ?? defaultValues.plankMass;
+    let plankLength = parameters?.plankLength ?? defaultValues.plankLength;
 // Global variables
 let car, plank, ground;
-let carVelocity = 2;
-let carMass = 10;
-let plankMass = 50;
-let plankLength = 400; // Increased from 300
+ // Increased from 300
 let plankWidth = 30;   // Increased from 20
 let carSize = 50;      // Increased from 30
 let systemVelocity = 0; // Velocity of the plank due to conservation of momentum
@@ -395,3 +409,4 @@ createCustomControlPanel();
 createCenterOfMassSystem();
 applyMomentumConservation();
 drawCenterOfMass();
+}

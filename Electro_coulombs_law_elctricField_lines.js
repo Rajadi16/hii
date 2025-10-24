@@ -1,10 +1,21 @@
 // coulombs_law.js - Coulomb's Law - Two Charges with Electrostatic Force
+const defaultValues={
+    charge1: 5.0,
+    charge2: 5.0,
+    initialDistance: 300
+};
+function startSimulation(parameters){
 
-// Global variables
-let charge1 = 5.0;
-let charge2 = 5.0;
-let initialDistance = 300;
-let k = 9.0; // Coulomb's constant (scaled for simulation)
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let charge1 = parameters?.charge1 ?? defaultValues.charge1;
+    let charge2 = parameters?.charge2 ?? defaultValues.charge2;
+    let initialDistance = parameters?.initialDistance ?? defaultValues.initialDistance;
+const k = 9.0; // Original Coulomb's constant (N⋅m²/C²)
 
 let body1, body2;
 let currentForce = 0;
@@ -211,11 +222,14 @@ Events.on(render, 'afterRender', function() {
     context.fillStyle = charge2 > 0 ? '#FF6347' : '#4169E1';
     context.fillText(`Charge 2 Speed: ${velocity2.toFixed(3)}`, panelX, yOffset);
 
-    // Formula display at bottom
-    context.fillStyle = '#FFFFFF';
-    context.font = 'italic 12px Arial';
-    context.fillText('Formula: F = k × |q₁ × q₂| / r²', 90, 580);
-    context.fillText('(Same charges repel, opposite charges attract)', 120, 595);
+    // Display original Coulomb's constant and formula on the bottom left
+    context.fillStyle = '#FFD700'; // Gold color for visibility
+    context.font = 'bold 14px Arial';
+    context.textAlign = 'left';
+    context.fillText('k = 8.988 × 10⁹ N⋅m²/C²', 20, 570);
+    context.font = '12px Arial';
+    context.fillText('F = k × |q₁ × q₂| / r²', 20, 590);
+    context.fillText('(Same charges repel, opposite charges attract)', 20, 610);
 });
 
 // Helper function to draw arrow
@@ -479,12 +493,6 @@ function createCustomControlPanel() {
             <input type="range" id="distance-slider" min="150" max="500" step="10" value="${initialDistance}">
             <div class="info-text">Distance between charges (px)</div>
         </div>
-
-        <div class="control-group">
-            <label>Coulomb Constant (k): <span class="value-display" id="k-value">${k.toFixed(1)}</span></label>
-            <input type="range" id="k-slider" min="1" max="20" step="0.5" value="${k}">
-            <div class="info-text">Electrostatic constant</div>
-        </div>
     `;
 
     document.body.appendChild(panel);
@@ -512,28 +520,20 @@ function attachControlListeners() {
         resetparams();
         playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
     });
-
-    document.getElementById('k-slider').addEventListener('input', function() {
-        k = parseFloat(this.value);
-        document.getElementById('k-value').textContent = k.toFixed(1);
-        resetparams();
-        playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-    });
 }
 
 function ResetGUI() {
     document.getElementById('q1-slider').value = charge1;
     document.getElementById('q2-slider').value = charge2;
     document.getElementById('distance-slider').value = initialDistance;
-    document.getElementById('k-slider').value = k;
 
     document.getElementById('q1-value').textContent = charge1.toFixed(1);
     document.getElementById('q2-value').textContent = charge2.toFixed(1);
     document.getElementById('distance-value').textContent = initialDistance;
-    document.getElementById('k-value').textContent = k.toFixed(1);
 }
 
 // Initialize
 addCustomControlStyles();
 createCustomControlPanel();
 createCoulombSystem(charge1, charge2, initialDistance);
+}

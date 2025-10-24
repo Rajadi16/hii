@@ -321,3 +321,7 @@ elasticCollision(2, 1, 3, -2, 1.0); // Controlled initial velocities
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
 }
+val={ball1Mass: 4, ball2Mass: 5, ball1VelX: 6, ball2VelX: 3, restitution: 2.0 
+};
+val=JSON.stringify(val);
+startSimulation(val);

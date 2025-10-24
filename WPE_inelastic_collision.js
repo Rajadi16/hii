@@ -1,11 +1,19 @@
 // inelastic_collision.js - Objects Sticking Together - FASTER VERSION
-
+const defaultValues = { ball1Mass: 3, ball2Mass: 2, ball1VelX: 4, ball2VelX: -3, stickiness: 0.5 };
 // Global variables
-let ball1Mass = 3;         // Mass of ball 1 (kg)
-let ball2Mass = 2;         // Mass of ball 2 (kg)  
-let ball1VelX = 4;         // Initial X velocity of ball 1 (m/s)
-let ball2VelX = -3;        // Initial X velocity of ball 2 (m/s)
-let stickiness = 0.5;      // How much they stick (0-1) - 0.5 is partially sticky
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+
+    let ball1Mass = parameters?.ball1Mass ?? defaultValues.ball1Mass;
+    let ball2Mass = parameters?.ball2Mass ?? defaultValues.ball2Mass;
+    let ball1VelX = parameters?.ball1VelX ?? defaultValues.ball1VelX;
+    let ball2VelX = parameters?.ball2VelX ?? defaultValues.ball2VelX;
+    let stickiness = parameters?.stickiness ?? defaultValues.stickiness;
 let ball1, ball2;
 
 function inelasticCollision(m1, m2, v1x, v2x, stick) {
@@ -403,3 +411,7 @@ inelasticCollision(3, 2, 4, -3, 0.5); // Start with partially sticky behavior
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
+}
+val={ball1Mass: 6, ball2Mass: 6, ball1VelX: 4, ball2VelX: -7, stickiness: 0.8 };
+val=JSON.stringify(val);
+startSimulation(val);

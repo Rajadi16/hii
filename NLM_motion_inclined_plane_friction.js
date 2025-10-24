@@ -4,11 +4,10 @@
 const defaultValues={
     friction: 0.3,
     appliedForce: 0,
-    forceAngle: 0,
-   
+    // forceAngle: 0,  // Removed force angle
     planeAngle: 30,
     blockSize: 25
-}
+};
 
 function startSimulation(parameters){
 
@@ -17,12 +16,10 @@ function startSimulation(parameters){
 
 
 //step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
-let electricField = parameters?.electricField ?? defaultValues.electricField;
-    let temperature = parameters?.temperature ?? defaultValues.temperature;
-    let material = parameters?.material ?? defaultValues.material;
+
     let friction = parameters?.friction ?? defaultValues.friction;
     let appliedForce = parameters?.appliedForce ?? defaultValues.appliedForce;
-    let forceAngle = parameters?.forceAngle ?? defaultValues.forceAngle;
+    // let forceAngle = parameters?.forceAngle ?? defaultValues.forceAngle;  // Removed force angle
     let planeAngle = parameters?.planeAngle ?? defaultValues.planeAngle;
     let blockSize = parameters?.blockSize ?? defaultValues.blockSize;
     
@@ -32,22 +29,18 @@ engine.world.gravity.y = 1;
 // Global variables
 let block, inclinedPlane;
 
-
-
 let gravity = 1;
-
 let blockMass = 10;
-
 
 // Convert degrees to radians
 function toRadians(degrees) {
     return degrees * (Math.PI / 180);
 }
 
-function motionInclinedPlane(frictionCoeff, force, forceAngleDeg, gravityConstant, inclineAngle, blockSizeParam) {
+function motionInclinedPlane(frictionCoeff, force, gravityConstant, inclineAngle, blockSizeParam) {
     friction = frictionCoeff;
     appliedForce = force;
-    forceAngle = forceAngleDeg;
+    // forceAngle = forceAngleDeg;  // Removed force angle
     gravity = gravityConstant;
     planeAngle = inclineAngle;
     blockSize = blockSizeParam;
@@ -116,13 +109,18 @@ function motionInclinedPlane(frictionCoeff, force, forceAngleDeg, gravityConstan
             applyExternalForce();
         }
     });
+    
+    // Add rendering event for live screen updates
+    Events.on(render, 'afterRender', function() {
+        // Live screen updates will happen automatically through Matter.js rendering
+    });
 }
 
 function applyExternalForce() {
     if (block && appliedForce > 0) {
-        // Reduced force multiplier for more controlled effect
-        const forceX = appliedForce * Math.cos(toRadians(forceAngle)) * 0.0002; // Reduced from 0.001
-        const forceY = appliedForce * Math.sin(toRadians(forceAngle)) * -0.0002; // Reduced from 0.001
+        // Apply force in the horizontal direction (along x-axis)
+        const forceX = appliedForce * 0.0005; // Adjusted multiplier for horizontal force
+        const forceY = 0; // No vertical component
         Body.applyForce(block, block.position, { x: forceX, y: forceY });
     }
 }
@@ -133,8 +131,9 @@ function resetScene() {
     Matter.World.clear(engine.world, false);
     // Reset force application events
     Events.off(engine, 'beforeUpdate');
+    Events.off(render, 'afterRender');
     // Recreate simulation
-    motionInclinedPlane(friction, appliedForce, forceAngle, gravity, planeAngle, blockSize);
+    motionInclinedPlane(friction, appliedForce, gravity, planeAngle, blockSize);
     ResetGUI();
     // Update play button
     if (typeof playPauseBtn !== 'undefined') {
@@ -148,8 +147,9 @@ function resetparams() {
     Matter.World.clear(engine.world, false);
     // Reset force application events
     Events.off(engine, 'beforeUpdate');
+    Events.off(render, 'afterRender');
     // Recreate simulation with new parameters
-    motionInclinedPlane(friction, appliedForce, forceAngle, gravity, planeAngle, blockSize);
+    motionInclinedPlane(friction, appliedForce, gravity, planeAngle, blockSize);
     // Update play button
     if (typeof playPauseBtn !== 'undefined') {
         playPauseBtn.innerHTML = '▶';
@@ -257,13 +257,7 @@ function createCustomControlPanel() {
             </div>
         </div>
         
-        <div class="control-group">
-            <label>Force Angle (degrees)</label>
-            <div class="slider-container">
-                <input type="range" id="angle-slider" min="-90" max="90" step="1" value="${forceAngle}">
-                <span class="slider-value" id="angle-value">${forceAngle}°</span>
-            </div>
-        </div>
+        <!-- Removed Force Angle control -->
         
         <div class="control-group">
             <label>Incline Angle (degrees)</label>
@@ -305,15 +299,7 @@ function createCustomControlPanel() {
         console.log("applied force changed");
     });
     
-    document.getElementById('angle-slider').addEventListener('input', function() {
-        forceAngle = parseFloat(this.value);
-        document.getElementById('angle-value').textContent = forceAngle + '°';
-        resetparams(); // Reset when angle changes
-        if (typeof playPauseBtn !== 'undefined') {
-            playPauseBtn.innerHTML = '▶';
-        }
-        console.log("force angle changed");
-    });
+    // Removed force angle event listener
     
     document.getElementById('plane-slider').addEventListener('input', function() {
         planeAngle = parseFloat(this.value);
@@ -340,13 +326,13 @@ function createCustomControlPanel() {
 function ResetGUI() {
     document.getElementById('friction-slider').value = friction;
     document.getElementById('force-slider').value = appliedForce;
-    document.getElementById('angle-slider').value = forceAngle;
+    // document.getElementById('angle-slider').value = forceAngle;  // Removed force angle
     document.getElementById('plane-slider').value = planeAngle;
     document.getElementById('size-slider').value = blockSize;
     
     document.getElementById('friction-value').textContent = friction;
     document.getElementById('force-value').textContent = appliedForce;
-    document.getElementById('angle-value').textContent = forceAngle + '°';
+    // document.getElementById('angle-value').textContent = forceAngle + '°';  // Removed force angle
     document.getElementById('plane-value').textContent = planeAngle + '°';
     document.getElementById('size-value').textContent = blockSize;
 }
@@ -355,7 +341,7 @@ function loadFromJSON(jsonData) {
     if (jsonData.simulation === "inclined_plane") {
         friction = jsonData.parameters.friction || friction;
         appliedForce = jsonData.parameters.applied_force || appliedForce;
-        forceAngle = jsonData.parameters.force_angle || forceAngle;
+        // forceAngle = jsonData.parameters.force_angle || forceAngle;  // Removed force angle
         planeAngle = jsonData.parameters.plane_angle || planeAngle;
         blockSize = jsonData.parameters.block_size || blockSize;
         
@@ -369,8 +355,16 @@ addCustomControlStyles();
 createCustomControlPanel();
 
 // Custom function call with default parameters - start with zero applied force
-motionInclinedPlane(0.3, 0, 0, 1, 30, 25); // friction=0.3, force=0, angle=0°, gravity=1, incline=30°, blockSize=25
+motionInclinedPlane(0.3, 0, 1, 30, 25); // friction=0.3, force=0, gravity=1, incline=30°, blockSize=25
 
 window.resetScene = resetScene;
 window.loadSimulationFromJSON = loadFromJSON;
 }
+ val={friction: 0.6,
+    appliedForce: 4,
+    // forceAngle: 5,  // Removed force angle
+    planeAngle: 23,
+    blockSize: 44
+ };
+ val=JSON.stringify(val);
+ startSimulation(val);

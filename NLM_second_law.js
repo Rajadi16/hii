@@ -1,8 +1,20 @@
 // laws_of_motion_second_law.js - Newton's Second Law (F=ma)
+const defaultValues={
+    force: 10,
+    mass: 5
+};
 
 // Global variables
-let force = 10;
-let mass = 5;
+function startSimulation(parameters){
+
+    //step 3: since gemini will return a string, convert it back to an object using JSON.parse() function
+    parameters=JSON.parse(parameters);
+
+
+//step 4 (very important) go through the variables present in parameters and check if any value is null. if its null, assign the default value in the following format (its the most efficient.)
+    let force = parameters?.force ?? defaultValues.force;
+    let mass = parameters?.mass ?? defaultValues.mass;
+   
 let acceleration = 2;
 let box;
 let time = 0;
@@ -327,3 +339,9 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createSecondLawSimulation();
+}
+val={force: 50,
+    mass: 6
+ };
+ val=JSON.stringify(val);
+ startSimulation(val);
