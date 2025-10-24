@@ -1,8 +1,15 @@
 // kinematics_1d_graphical_analysis.js - Graphical Analysis of Motion
+const defautValues={
+    initialVelocity:5,
+    acceleration:2
+};
 
+startSimulation(parameters)
+{
 // Global variables
-let initialVelocity = 5;
-let acceleration = 2;
+parameters=JSON.parse(parameters);
+let initialVelocity = parameters?.initialVelocity??defautValues.initialVelocity;
+let acceleration = parameters?.acceleration??defautValues.acceleration;
 let position = 0;
 let velocity = 0;
 let time = 0;
@@ -391,3 +398,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 create1DMotionSimulation();
+}

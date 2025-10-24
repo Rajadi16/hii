@@ -1,10 +1,20 @@
 // kinematics_2d_relative_motion.js - Relative Motion Visualization
+const defaultValues={
+    velocityA_x:3,
+    velocityA_y:2,
+    velocityB_x:-2,
+    velocityB_y:3
+}
 
+
+startSimulation(parameters)
+{
 // Global variables
-let velocityA_x = 3; // m/s
-let velocityA_y = 2; // m/s
-let velocityB_x = -2; // m/s
-let velocityB_y = 3; // m/s
+parameters=JSON.parse(parameters);
+let velocityA_x =parameters?.velocityA_x??defaultValues.velocityA_x;
+let velocityA_y = parameters?.velocityA_y??defaultValues.velocityA_y;
+let velocityB_x = parameters?.velocityB_x??defaultValues.velocityB_x;
+let velocityB_y = parameters?.velocityB_y??defaultValues.velocityB_y;
 
 let positionA = { x: 100, y: 300 };
 let positionB = { x: 600, y: 300 };
@@ -509,3 +519,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createRelativeMotionSimulation();
+}

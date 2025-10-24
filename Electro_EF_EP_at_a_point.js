@@ -1,9 +1,19 @@
 // electric_field_lines.js - Electric Field Lines Visualization
 
+const defaultValues={
+    charge1:5.0,
+    charge2:5.0,
+    initialDistance:400
+}
+
+
 // Global variables
-let charge1 = 5.0;
-let charge2 = -5.0;
-let initialDistance = 400;
+function startSimulation(parameters)
+{
+parameters=JSON.parse(parameters);
+let charge1 = parameters?.charge1??defaultValues.charge1;
+let charge2 = parameters?.charge2??defaultValues.charge2;
+let initialDistance = parameters?.defaultValues.initialDistance;
 let k = 9.0; // Coulomb's constant
 
 let body1, body2;
@@ -580,3 +590,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createFieldLineSystem(charge1, charge2, initialDistance);
+}

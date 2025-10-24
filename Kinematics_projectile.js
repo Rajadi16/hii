@@ -2,13 +2,29 @@
 
 //when reset, just the position is changing, im not putting stuff back to initial.
 
+const defaultValues={
+    blockHeight:100,
+    xVelocity:10,
+    yVelocity:-4,
+
+
+}
+
 // Global variables
-let blockHeight = 100;
-let xVelocity = 4;
-let yVelocity = -4;
+
+
+function startSimulation(parameters)
+{
+parameters=JSON.parse(parameters);
+let blockHeight = parameters?.blockHeight??defaultValues.blockHeight;
+let xVelocity = parameters?.xVelocity??defaultValues.xVelocity;
+let yVelocity = parameters?.yVelocity??defaultValues.yVelocity;
 let velocity = 10;      // Overall velocity magnitude
 let angle = 30;         // Launch angle in degrees
 let block, body;
+
+
+
 
 // ground(common to questions with a ground-this exact code.)
 const ground = Bodies.rectangle(400, 575, 800, 50, { isStatic: true,render:{ fillStyle: '#28ba3eff'}});
@@ -22,10 +38,7 @@ const circleRadius = 20;
 // Ground top edge
 const groundTop = 550; // center - half height = 550
 
-function projectileMotion(height, xVel, yVel){
-    blockHeight = height;
-    xVelocity = xVel;
-    yVelocity = yVel;
+function projectileMotion(){
 
     // Block center y
     let blockY = groundTop - blockHeight / 2;
@@ -304,7 +317,10 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 updateVelocityComponents(); // Calculate initial x,y velocities from angle and speed
-projectileMotion(100, xVelocity, yVelocity);
-
+projectileMotion();
+}
+let val={xVelocity:null,yVelocity:null,blockHeight:null};
+val=JSON.stringify(val);
+startSimulation(val);
 //change the behavior on reset
 //when increasing the height of the body, the y position must increase also , the block must be replaced with a different block of different height

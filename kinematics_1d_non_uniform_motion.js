@@ -1,8 +1,16 @@
 // kinematics_1d_non_uniform_motion.js - 1D Non-Uniform Motion Simulator
-
+const defaultValues={
+    initialVelocity:0,
+    acceleration:2
+};
 // Global variables
-let initialVelocity = 0; // m/s
-let acceleration = 2; // m/s²
+
+
+function startSimulation(parameters){
+
+parameters=JSON.parse(parameters);
+let initialVelocity = parameters?.initialVelocity??defaultValues.initialVelocity;
+let acceleration = parameters?.acceleration??defaultValues.acceleration;
 let position = 0; // meters
 let velocity = 0; // m/s
 let time = 0; // seconds
@@ -361,3 +369,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 create1DMotionSimulation();
+}

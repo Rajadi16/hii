@@ -1,9 +1,21 @@
 // gravitational_escape_velocity.js - Perfect Escape Velocity (Free Fall Approach)
 
 // Global variables
-let planetMass = 100;
-let planetRadius = 150;
-let launchSpeed = 30;
+const defaultValues={
+    planetMass:100,
+    planetRadius:150,
+    launchSpeed:30,
+    
+};
+
+
+
+function startSimulation(parameters){
+parameters=JSON.parse(parameters);
+
+let planetMass = parameters?.planetMass??defaultValues.planetMass;
+let planetRadius = parameters?.planetRadius??defaultValues.planetRadius;
+let launchSpeed = parameters?.launchSpeed??defaultValues.launchSpeed;
 let G = 50;
 let gravity_accel = 0.5;  // Constant downward acceleration for free fall
 
@@ -405,3 +417,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createEscapeScenario(planetMass, planetRadius, launchSpeed);
+}

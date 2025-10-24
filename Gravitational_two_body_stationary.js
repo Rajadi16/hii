@@ -1,10 +1,22 @@
 // gravitational_two_body_stationary.js - Two Stationary Bodies Attracting
 
 // Global variables
-let mass1 = 30;
-let mass2 = 30;
-let initialDistance = 400;
-let G = 0.8; // Gravitational constant (scaled for simulation)
+
+
+const defaultValues={
+    mass1:30,
+    mass2:30,
+    initialDistance:400
+};
+
+function startSimulation(parameters)
+{
+parameters=JSON.parse(parameters);
+let mass1 = parameters?.mass1??defaultValues.mass1;
+let mass2 = parameters?.mass2??defaultValues.mass2;
+let initialDistance = parameters?.initialDistance??defaultValues.initialDistance;
+const G = 6.674e-11;
+
 
 let body1, body2;
 let currentForce = 0;
@@ -16,11 +28,7 @@ engine.world.gravity.y = 0;
 engine.world.gravity.x = 0;
 
 // Create two stationary bodies
-function createTwoBodySystem(m1, m2, distance) {
-    mass1 = m1;
-    mass2 = m2;
-    initialDistance = distance;
-
+function createTwoBodySystem() {
     const centerX = 400;
     const centerY = 300;
 
@@ -417,4 +425,5 @@ function ResetGUI() {
 // Initialize
 addCustomControlStyles();
 createCustomControlPanel();
-createTwoBodySystem(mass1, mass2, initialDistance);
+createTwoBodySystem();
+}

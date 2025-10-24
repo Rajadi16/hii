@@ -1,9 +1,20 @@
 // drift_velocity.js - Drift Velocity & Electron Motion Simulator
 // Global variables
-let electricField = 100; // V/m
-let temperature = 300; // Kelvin
+
+const defaultValues={
+    electricField:100,temperature:300,material:'Copper'
+
+};
+
+
+
+function startSimulation(parameters){
+parameters=JSON.parse(parameters);
+
+let electricField = parameters?.electricField??defaultValues.electricField;
+let temperature = parameters?.temperature??defaultValues.temperature; // Kelvin
 let relaxationTime = 2.3e-14; // seconds
-let material = 'Copper';
+let material = parameters?.material??defaultValues.material;
 
 // Physical constants
 const electronCharge = 1.602e-19;
@@ -340,3 +351,4 @@ function createCustomControlPanel() {
 addCustomControlStyles();
 createCustomControlPanel();
 createDriftVelocitySimulation();
+}

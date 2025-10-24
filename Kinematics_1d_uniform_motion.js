@@ -1,9 +1,21 @@
 // kinematics_1d_uniform_motion.js - 1D Uniform Linear Motion Simulator
 // Global variables
-let velocity = 5; // m/s
+const defaultValues={
+    velocity:5,
+    initialPosition:0,
+    time:0
+};
+
+
+function startSimulation(parameters){
+    parameters=JSON.parse(parameters);
+    let velocity=parameters?.velocity??defaultValues.velocity;
+    let initialPosition=parameters?.initialPosition??defaultValues.initialPosition;
+    let time=parameters?.time??defaultValues.time;
+//let velocity = 5; // m/s
 let position = 0; // meters
-let time = 0; // seconds
-let initialPosition = 0; // meters
+//let time = 0; // seconds
+//let initialPosition = 0; // meters
 let trailPoints = []; // For drawing position trail
 let maxTrailPoints = 100;
 let simulationComplete = false; // Flag to indicate if simulation is complete
@@ -389,3 +401,4 @@ function createCustomControlPanel() {
 addCustomControlStyles();
 createCustomControlPanel();
 create1DMotionSimulation();
+}

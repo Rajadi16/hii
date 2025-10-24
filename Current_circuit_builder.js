@@ -1,10 +1,21 @@
 // circuit_builder.js - Series & Parallel Circuit Analyzer
 // Global variables
-let circuitType = 'series'; // 'series' or 'parallel'
-let resistor1 = 100;
-let resistor2 = 220;
-let resistor3 = 330;
-let voltage = 12;
+const defaultValues={
+    circuitType:'series',
+    resistor1:100,
+    resistor2:100,
+    resistor3:100,
+    voltage:12
+};
+
+function startSimulation(parameters)
+{
+
+let circuitType = parameters?.circuitType??defaultValues.circuitType; // 'series' or 'parallel'
+let resistor1 = parameters?.resistor1??defaultValues.resistor1;
+let resistor2 = parameters?.resistor2??defaultValues.resistor2;
+let resistor3 = parameters?.resistor3??defaultValues.resistor3;
+let voltage = parameters?.voltage??defaultValues.voltage;
 let totalResistance = 0;
 let totalCurrent = 0;
 let current1 = 0, current2 = 0, current3 = 0;
@@ -382,3 +393,4 @@ function setCircuitType(type) {
 addCustomControlStyles();
 createCustomControlPanel();
 createCircuit();
+}

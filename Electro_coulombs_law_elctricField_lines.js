@@ -1,9 +1,17 @@
 // coulombs_law.js - Coulomb's Law - Two Charges with Electrostatic Force
 
 // Global variables
-let charge1 = 5.0;
-let charge2 = 5.0;
-let initialDistance = 300;
+const defaultValues={
+    charge1:5.0,
+    charge2:5.0,
+    initialDistance:300};
+
+
+function startSimulation(parameters){
+    parameters=JSON.parse(parameters);
+let charge1 = parameters?.charge1??defaultValues.charge1;
+let charge2 = parameters?.charge2??defaultValues.charge2;
+let initialDistance = parameters?.defaultValues.initialDistance;
 let k = 9.0; // Coulomb's constant (scaled for simulation)
 
 let body1, body2;
@@ -537,3 +545,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createCoulombSystem(charge1, charge2, initialDistance);
+}

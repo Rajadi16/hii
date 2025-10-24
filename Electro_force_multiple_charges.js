@@ -1,10 +1,22 @@
 // force_multiple_charges.js - Force on Test Charge from Multiple Charges
 
+const defaultValues={
+    testCharge:1.0,
+    charge1:5.0,
+    charge2:-5.0,
+    charge3:3.0
+}
+
+
+
+
 // Global variables
-let testCharge = 1.0;
-let charge1 = 5.0;
-let charge2 = -5.0;
-let charge3 = 3.0;
+function startSimulation(parameters){
+parameters=JSON.parse(parameters);
+let testCharge = parameters?.testCharge??defaultValues.testCharge;
+let charge1 = parameters?.charge1??defaultValues.charge1;
+let charge2 = parameters?.charge2??defaultValues.charge2;
+let charge3 = parameters?.charge3??defaultValues.charge3;
 let k = 9.0;
 
 let testBody, body1, body2, body3;
@@ -472,3 +484,4 @@ function ResetGUI() {
 addCustomControlStyles();
 createCustomControlPanel();
 createMultiChargeSystem(testCharge, charge1, charge2, charge3, k);
+}

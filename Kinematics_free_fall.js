@@ -1,11 +1,22 @@
 // freefall.js - CORRECTED Free Fall with Proper Equations of Motion
 
 // Global variables  
-let dropHeight = 300;
-let initialVelocity = 0;
-let mass = 1;
-let airResistance = 0;
-let gravity = 9.81;
+const defaultValues={
+    dropHeight: 300,
+    initialVelocity:0,
+    mass:1,
+    airResistance:0,
+    gravity:9.81
+};
+
+function startSimulation(parameters)
+{
+    parameters=JSON.parse(parameters);
+let dropHeight = parameters?.dropHeight??defaultValues.dropHeight;
+let initialVelocity=parameters?.initialVelocity??defaultValues.initialVelocity;
+let mass=parameters?.mass??defaultValues.mass;
+let airResistance = parameters?.mass??defaultValues.airResistance;
+let gravity = parameters?.gravity??defaultValues.gravity;
 let ball, ground;
 let velocityDisplay; // To show real-time velocity
 
@@ -367,3 +378,4 @@ updatePhysicsCalculations();
 freeFallMotion(300, 0, 1, 0, 9.81);
 
 window.resetScene = resetScene;
+}
